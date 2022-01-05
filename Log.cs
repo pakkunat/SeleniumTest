@@ -11,7 +11,7 @@ namespace PLib {
         if (!Directory.Exists(PATH)) {
           Directory.CreateDirectory(PATH);
         }
-        File.AppendAllText($"{PATH}/{now:yyyyMMdd}_log.txt", $"{contents}¥n");
+        File.AppendAllText($"{PATH}/{now:yyyyMMdd}_log.txt", $"{contents}\n");
       } catch {
       }
     }

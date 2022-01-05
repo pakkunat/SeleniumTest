@@ -10,14 +10,21 @@ namespace PLib {
 
     private const string URL = "https://www.instagram.com/";
 
-    private ChromeDriver _chromeDriver;
+    private ChromeDriver? _chromeDriver = null;
 
     public bool LaunchBrowser(Browser browser, bool headless) {
+      // null check
+      if (_chromeDriver != null) {
+        Log.Write($"Already launched");
+        return true;
+      }
+
       // create browser options
       var options = new ChromeOptions();
       if (headless) {
         options.AddArgument("--headless");  
       }
+
       // launch browser
       try {
         _chromeDriver = new ChromeDriver(options);
@@ -30,9 +37,15 @@ namespace PLib {
     }
 
     public bool AccessInstagram() {
+      // null check
+      if (_chromeDriver == null) {
+        Log.Write($"Not launch yet");
+        return false;
+      }
+
       // access website
       try {
-        _chromeDriver.Navigate().GoToUrl(URL);
+        _chromeDriver?.Navigate().GoToUrl(URL);
       } catch (Exception ex) {
         Console.WriteLine(ex.Message);
         Log.Write($"Exception: browse instagram: {ex.Message}");
@@ -42,9 +55,15 @@ namespace PLib {
     }
     
     public bool Login(string username, string password) {
+      // null check
+      if (_chromeDriver == null) {
+        Log.Write($"Not launch yet");
+        return false;
+      }
+
       // input username
       try {
-        _chromeDriver.FindElement(By.Name("username")).SendKeys(username);  
+        _chromeDriver?.FindElement(By.Name("username")).SendKeys(username);  
       } catch (Exception ex) {
         Console.WriteLine(ex.Message);
         Log.Write($"Exception: input username: {ex.Message}");
@@ -53,7 +72,7 @@ namespace PLib {
 
       // input password
       try {
-        _chromeDriver.FindElement(By.Name("password")).SendKeys(password);
+        _chromeDriver?.FindElement(By.Name("password")).SendKeys(password);
       } catch (Exception ex) {
         Console.WriteLine(ex.Message);
         Log.Write($"Exception: input password: {ex.Message}");
@@ -62,7 +81,7 @@ namespace PLib {
 
       // login
       try {
-        _chromeDriver.FindElement(By.ClassName("L3NKy")).Click();
+        _chromeDriver?.FindElement(By.ClassName("L3NKy")).Click();
       } catch (Exception ex) {
         Console.WriteLine(ex.Message);
         Log.Write($"Exception: login: {ex.Message}");
@@ -72,15 +91,28 @@ namespace PLib {
     }
 
     public bool Explore() {
+      // null check
+      if (_chromeDriver == null) {
+        Log.Write($"Not launch yet");
+        return false;
+      }
+
       return true;
     }
 
     public bool Like() {
+      // null check
+      if (_chromeDriver == null) {
+        Log.Write($"Not launch yet");
+        return false;
+      }
+      
       return true;
     }
 
     public void Quit() {
-      _chromeDriver.Quit();
+      _chromeDriver?.Quit();
+      _chromeDriver = null;
     }
   }
 }
