@@ -97,6 +97,35 @@ namespace PLib {
         return false;
       }
 
+      _chromeDriver?.Navigate().GoToUrl("https://www.instagram.com/explore/tags/camera");
+  
+      return true;
+    }
+
+    public bool Move() {
+      // null check
+      if (_chromeDriver == null) {
+        Log.Write($"Not launch yet");
+        return false;
+      }
+
+      var target = _chromeDriver?.FindElements(By.ClassName("_9AhH0"))[10];
+      var actions = new Actions(_chromeDriver);
+      actions.MoveToElement(target);
+      actions.Perform();
+
+      return true;
+    }
+
+    public bool Select() {
+      // null check
+      if (_chromeDriver == null) {
+        Log.Write($"Not launch yet");
+        return false;
+      }
+
+      _chromeDriver?.FindElements(By.ClassName("_9AhH0"))[9].Click();
+
       return true;
     }
 
@@ -106,7 +135,9 @@ namespace PLib {
         Log.Write($"Not launch yet");
         return false;
       }
-      
+
+      _chromeDriver?.FindElement(By.ClassName("fr66n")).Click();
+
       return true;
     }
 

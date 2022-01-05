@@ -3,17 +3,29 @@
 Log.Write("Start!");
 Console.WriteLine("Welcome to automatic likes in instagram");
 
-// query as headless
-Console.WriteLine("Do you wanna launch app as headless? (y/n)");
-var headless = Console.ReadLine();
-Log.Write($"headless: {headless}");
+// if use setting file
+Console.WriteLine("Do you use your setting file? (y/n");
+var setting = Console.ReadLine();
+Log.Write($"setting: {setting}");
 
-// input instagram user name and password
-Console.WriteLine("Type your instagram user name");
-var username = $"{Console.ReadLine()}";
-Log.Write($"username: {username}");
-Console.WriteLine("Type your instagram password");
-var password = $"{Console.ReadLine()}";
+var headless = string.Empty;
+var username = string.Empty;
+var password = string.Empty;
+if (setting == "y") {
+
+} else {
+  // if use headless
+  Console.WriteLine("Do you wanna launch app as headless? (y/n)");
+  headless = Console.ReadLine();
+  Log.Write($"headless: {headless}");
+
+  // input instagram user name and password
+  Console.WriteLine("Type your instagram user name");
+  username = $"{Console.ReadLine()}";
+  Log.Write($"username: {username}");
+  Console.WriteLine("Type your instagram password");
+  password = $"{Console.ReadLine()}";
+}
 
 // launch browser
 var instagram = new Instagram();
@@ -21,7 +33,7 @@ if (!instagram.LaunchBrowser(Instagram.Browser.Chrome, headless == "y")) {
   Log.Write($"Quit");
   return;
 }
-Thread.Sleep(1000);
+//Thread.Sleep(1000);
 
 // access website
 if (!instagram.AccessInstagram()) {
@@ -39,35 +51,47 @@ if (!instagram.Login(username, password)) {
 }
 Thread.Sleep(5000);
 
+#if false
 // 1. フォローの多いアカウントの投稿にコメントしている人にいいねする
 // 2. コメントしている人に入って投稿にいいねする（2〜5個）
-// 3. 自動でコメントできるかどうか
+// 3. 自動でコメントやDMできるかどうか
 
-#if false
-//var key = Console.ReadKey().Key;
-//if (key == ConsoleKey.A) {
-  // search tags
-  driver.Navigate().GoToUrl("https://www.instagram.com/explore/tags/camera");
-  Thread.Sleep(3000);
-//}
+// explore tags
+if (!instagram.Explore()) {
+  instagram.Quit();
+  Log.Write($"Quit");
+  return;
+}
+Thread.Sleep(3000);
 
 // move to 10th image
-var target = driver.FindElements(By.ClassName("_9AhH0"))[10];
-var actions = new Actions(driver);
-actions.MoveToElement(target);
-actions.Perform();
+if (!instagram.Move()) {
+  instagram.Quit();
+  Log.Write($"Quit");
+  return;
+}
 Thread.Sleep(1000);
 
 // click latest image
-driver.FindElements(By.ClassName("_9AhH0"))[9].Click();
+if (!instagram.Select()) {
+  instagram.Quit();
+  Log.Write($"Quit");
+  return;
+}
 Thread.Sleep(1000);
-driver.FindElement(By.ClassName("fr66n")).Click();
-#endif
+
+// like
+if (!instagram.Like()) {
+  instagram.Quit();
+  Log.Write($"Quit");
+  return;
+}
 
 ConsoleKey key;
 do {
   key = Console.ReadKey().Key;
 } while (key != ConsoleKey.Escape);
+#endif
 
 // close instance
 instagram.Quit();
