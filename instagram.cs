@@ -72,11 +72,11 @@ namespace PLib {
     }
 
     public bool Explore() {
-
+      return true;
     }
 
     public bool Like() {
-      
+      return true;
     }
 
     public void Quit() {

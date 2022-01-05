@@ -2,6 +2,7 @@
 
 Console.WriteLine("Welcome to automatic likes in instagram");
 
+#if false
 // query as headless
 Console.WriteLine("Do you wanna launch app as headless? (y/n)");
 var headless = Console.ReadLine();
@@ -70,3 +71,4 @@ do {
 // close instance
 instagram.Quit();
 Log.Write($"Quit");
+#endif
