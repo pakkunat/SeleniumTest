@@ -10,12 +10,13 @@ namespace PLib {
 
     private const string URL = "https://www.instagram.com/";
 
+    private Log log = Log.Instance;
     private ChromeDriver? _chromeDriver = null;
 
     public bool LaunchBrowser(Browser browser, bool headless) {
       // null check
       if (_chromeDriver != null) {
-        Log.Write($"Already launched");
+        log.Write($"Already launched");
         return true;
       }
 
@@ -30,7 +31,7 @@ namespace PLib {
         _chromeDriver = new ChromeDriver(options);
       } catch (Exception ex) {
         Console.WriteLine(ex.Message);
-        Log.Write($"Exception: launch chrome: {ex.Message}");
+        log.Write($"Exception: launch chrome: {ex.Message}");
         return false;
       }
       return true;
@@ -39,7 +40,7 @@ namespace PLib {
     public bool AccessInstagram() {
       // null check
       if (_chromeDriver == null) {
-        Log.Write($"Not launch yet");
+        log.Write($"Not launch yet");
         return false;
       }
 
@@ -48,7 +49,7 @@ namespace PLib {
         _chromeDriver?.Navigate().GoToUrl(URL);
       } catch (Exception ex) {
         Console.WriteLine(ex.Message);
-        Log.Write($"Exception: browse instagram: {ex.Message}");
+        log.Write($"Exception: browse instagram: {ex.Message}");
         return false;
       }
       return true;
@@ -57,7 +58,7 @@ namespace PLib {
     public bool Login(string username, string password) {
       // null check
       if (_chromeDriver == null) {
-        Log.Write($"Not launch yet");
+        log.Write($"Not launch yet");
         return false;
       }
 
@@ -66,7 +67,7 @@ namespace PLib {
         _chromeDriver?.FindElement(By.Name("username")).SendKeys(username);  
       } catch (Exception ex) {
         Console.WriteLine(ex.Message);
-        Log.Write($"Exception: input username: {ex.Message}");
+        log.Write($"Exception: input username: {ex.Message}");
         return false;
       }
 
@@ -75,7 +76,7 @@ namespace PLib {
         _chromeDriver?.FindElement(By.Name("password")).SendKeys(password);
       } catch (Exception ex) {
         Console.WriteLine(ex.Message);
-        Log.Write($"Exception: input password: {ex.Message}");
+        log.Write($"Exception: input password: {ex.Message}");
         return false;
       }
 
@@ -84,7 +85,7 @@ namespace PLib {
         _chromeDriver?.FindElement(By.ClassName("L3NKy")).Click();
       } catch (Exception ex) {
         Console.WriteLine(ex.Message);
-        Log.Write($"Exception: login: {ex.Message}");
+        log.Write($"Exception: login: {ex.Message}");
         return false;
       }
       return true;
@@ -93,7 +94,7 @@ namespace PLib {
     public bool Explore() {
       // null check
       if (_chromeDriver == null) {
-        Log.Write($"Not launch yet");
+        log.Write($"Not launch yet");
         return false;
       }
 
@@ -105,7 +106,7 @@ namespace PLib {
     public bool Move() {
       // null check
       if (_chromeDriver == null) {
-        Log.Write($"Not launch yet");
+        log.Write($"Not launch yet");
         return false;
       }
 
@@ -120,7 +121,7 @@ namespace PLib {
     public bool Select() {
       // null check
       if (_chromeDriver == null) {
-        Log.Write($"Not launch yet");
+        log.Write($"Not launch yet");
         return false;
       }
 
@@ -132,7 +133,7 @@ namespace PLib {
     public bool Like() {
       // null check
       if (_chromeDriver == null) {
-        Log.Write($"Not launch yet");
+        log.Write($"Not launch yet");
         return false;
       }
 

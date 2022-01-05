@@ -1,12 +1,13 @@
 ﻿using PLib;
 
-Log.Write("Start!");
+var log = Log.Instance;
+log.Write("Start!");
 Console.WriteLine("Welcome to automatic likes in instagram");
 
 // if use setting file
 Console.WriteLine("Do you use your setting file? (y/n");
 var setting = Console.ReadLine();
-Log.Write($"setting: {setting}");
+log.Write($"setting: {setting}");
 
 var headless = string.Empty;
 var username = string.Empty;
@@ -17,12 +18,12 @@ if (setting == "y") {
   // if use headless
   Console.WriteLine("Do you wanna launch app as headless? (y/n)");
   headless = Console.ReadLine();
-  Log.Write($"headless: {headless}");
+  log.Write($"headless: {headless}");
 
   // input instagram user name and password
   Console.WriteLine("Type your instagram user name");
   username = $"{Console.ReadLine()}";
-  Log.Write($"username: {username}");
+  log.Write($"username: {username}");
   Console.WriteLine("Type your instagram password");
   password = $"{Console.ReadLine()}";
 }
@@ -30,7 +31,7 @@ if (setting == "y") {
 // launch browser
 var instagram = new Instagram();
 if (!instagram.LaunchBrowser(Instagram.Browser.Chrome, headless == "y")) {
-  Log.Write($"Quit");
+  log.Write($"Quit");
   return;
 }
 //Thread.Sleep(1000);
@@ -38,7 +39,7 @@ if (!instagram.LaunchBrowser(Instagram.Browser.Chrome, headless == "y")) {
 // access website
 if (!instagram.AccessInstagram()) {
   instagram.Quit();
-  Log.Write($"Quit");
+  log.Write($"Quit");
   return;
 }
 Thread.Sleep(1000);
@@ -46,7 +47,7 @@ Thread.Sleep(1000);
 // login
 if (!instagram.Login(username, password)) {
   instagram.Quit();
-  Log.Write($"Quit");
+  log.Write($"Quit");
   return;
 }
 Thread.Sleep(5000);
@@ -59,7 +60,7 @@ Thread.Sleep(5000);
 // explore tags
 if (!instagram.Explore()) {
   instagram.Quit();
-  Log.Write($"Quit");
+  log.Write($"Quit");
   return;
 }
 Thread.Sleep(3000);
@@ -67,7 +68,7 @@ Thread.Sleep(3000);
 // move to 10th image
 if (!instagram.Move()) {
   instagram.Quit();
-  Log.Write($"Quit");
+  log.Write($"Quit");
   return;
 }
 Thread.Sleep(1000);
@@ -75,7 +76,7 @@ Thread.Sleep(1000);
 // click latest image
 if (!instagram.Select()) {
   instagram.Quit();
-  Log.Write($"Quit");
+  log.Write($"Quit");
   return;
 }
 Thread.Sleep(1000);
@@ -83,7 +84,7 @@ Thread.Sleep(1000);
 // like
 if (!instagram.Like()) {
   instagram.Quit();
-  Log.Write($"Quit");
+  log.Write($"Quit");
   return;
 }
 
@@ -95,4 +96,4 @@ do {
 
 // close instance
 instagram.Quit();
-Log.Write($"Quit");
+log.Write($"Quit");
