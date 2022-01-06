@@ -9,15 +9,22 @@ Console.WriteLine("Do you use your setting file? (y/n");
 var setting = Console.ReadLine();
 log.Write($"setting: {setting}");
 
-var headless = string.Empty;
+var headless = false;
 var username = string.Empty;
 var password = string.Empty;
 if (setting == "y") {
-
+  var settings = new Setting();
+  if (!settings.Read("./setting/setting.toml")) {
+    log.Write($"Quit");
+    return;
+  }
+  headless = settings.IsHeadless;
+  username = settings.UserName;
+  password = settings.Password;
 } else {
   // if use headless
   Console.WriteLine("Do you wanna launch app as headless? (y/n)");
-  headless = Console.ReadLine();
+  headless = Console.ReadLine() == "y";
   log.Write($"headless: {headless}");
 
   // input instagram user name and password
@@ -30,7 +37,7 @@ if (setting == "y") {
 
 // launch browser
 var instagram = new Instagram();
-if (!instagram.LaunchBrowser(Instagram.Browser.Chrome, headless == "y")) {
+if (!instagram.LaunchBrowser(Instagram.Browser.Chrome, headless)) {
   log.Write($"Quit");
   return;
 }
