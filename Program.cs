@@ -4,89 +4,86 @@ var log = Log.Instance;
 log.Write("Start!");
 Console.WriteLine("Welcome to automatic likes in instagram");
 
-// if use setting file
-Console.WriteLine("Do you use your setting file? (y/n");
-var setting = Console.ReadLine();
-log.Write($"setting: {setting}");
-
-var headless = false;
-var username = string.Empty;
-var password = string.Empty;
-if (setting == "y") {
-  var settings = new Setting();
-  if (!settings.Read("./setting/setting.toml")) {
-    log.Write($"Quit");
-    return;
-  }
-  headless = settings.IsHeadless;
-  username = settings.UserName;
-  password = settings.Password;
-} else {
-  // if use headless
-  Console.WriteLine("Do you wanna launch app as headless? (y/n)");
-  headless = Console.ReadLine() == "y";
-  log.Write($"headless: {headless}");
-
-  // input instagram user name and password
-  Console.WriteLine("Type your instagram user name");
-  username = $"{Console.ReadLine()}";
-  log.Write($"username: {username}");
-  Console.WriteLine("Type your instagram password");
-  password = $"{Console.ReadLine()}";
+// load setting file
+var setting = new Setting();
+if (!setting.Read("./setting/setting.toml")) {
+  log.Write($"Quit");
+  return;
 }
+log.Write($"IsNoWindow: {setting.IsNoWindow}");
+log.Write($"UserName: {setting.UserName}");
+log.Write($"Password: {setting.Password}");
+log.Write($"AfterLaunchBrowser: {setting.AfterLaunchBrowser} ms");
+log.Write($"AfterAccessApp: {setting.AfterAccessApp} ms");
+log.Write($"AfterLogin: {setting.AfterLogin} ms");
+log.Write($"AfterExplore: {setting.AfterExplore} ms");
+log.Write($"AfterMove: {setting.AfterMove} ms");
+log.Write($"AfterSelect: {setting.AfterSelect} ms");
+var tags = string.Empty;
+foreach (var t in setting.Tags) {
+  tags += $"{t},";
+}
+log.Write($"Tags: {tags}");
 
 // launch browser
 var instagram = new Instagram();
-if (!instagram.LaunchBrowser(Instagram.Browser.Chrome, headless)) {
+if (!instagram.LaunchBrowser(Instagram.Browser.Chrome, setting.IsNoWindow)) {
   log.Write($"Quit");
   return;
 }
-//Thread.Sleep(1000);
+Thread.Sleep(setting.AfterLaunchBrowser);
 
 // access website
-if (!instagram.AccessInstagram()) {
+if (!instagram.AccessApp()) {
   instagram.Quit();
   log.Write($"Quit");
   return;
 }
-Thread.Sleep(1000);
+Thread.Sleep(setting.AfterAccessApp);
 
 // login
-if (!instagram.Login(username, password)) {
+if (!instagram.Login(setting.UserName, setting.Password)) {
   instagram.Quit();
   log.Write($"Quit");
   return;
 }
-Thread.Sleep(5000);
+Thread.Sleep(setting.AfterLogin);
+
+// explore tags
+if (!instagram.Explore(setting.Tags[0])) {
+  instagram.Quit();
+  log.Write($"Quit");
+  return;
+}
+Thread.Sleep(setting.AfterExplore);
+
+// move to latest image
+if (!instagram.Move(9)) {
+  instagram.Quit();
+  log.Write($"Quit");
+  return;
+}
+Thread.Sleep(setting.AfterMove);
+
+// click image
+if (!instagram.Select(9)) {
+  instagram.Quit();
+  log.Write($"Quit");
+  return;
+}
+Thread.Sleep(setting.AfterSelect);
+
+// do comment like
+if (!instagram.CommentLike()) {
+  instagram.Quit();
+  log.Write($"Quit");
+  return;
+}
 
 #if false
 // 1. フォローの多いアカウントの投稿にコメントしている人にいいねする
 // 2. コメントしている人に入って投稿にいいねする（2〜5個）
 // 3. 自動でコメントやDMできるかどうか
-
-// explore tags
-if (!instagram.Explore()) {
-  instagram.Quit();
-  log.Write($"Quit");
-  return;
-}
-Thread.Sleep(3000);
-
-// move to 10th image
-if (!instagram.Move()) {
-  instagram.Quit();
-  log.Write($"Quit");
-  return;
-}
-Thread.Sleep(1000);
-
-// click latest image
-if (!instagram.Select()) {
-  instagram.Quit();
-  log.Write($"Quit");
-  return;
-}
-Thread.Sleep(1000);
 
 // like
 if (!instagram.Like()) {
@@ -94,12 +91,12 @@ if (!instagram.Like()) {
   log.Write($"Quit");
   return;
 }
+#endif
 
-ConsoleKey key;
+var key = ConsoleKey.NoName;
 do {
   key = Console.ReadKey().Key;
 } while (key != ConsoleKey.Escape);
-#endif
 
 // close instance
 instagram.Quit();
