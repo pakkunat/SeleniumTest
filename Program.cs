@@ -1,7 +1,7 @@
 ﻿using PLib;
 
 var log = Log.Instance;
-log.Write("Start!");
+log.Write("Start --------------------");
 Console.WriteLine("Welcome to automatic likes in instagram");
 
 // load setting file
@@ -85,7 +85,7 @@ if (!instagram.CommentLike()) {
 // 2. コメントしている人に入って投稿にいいねする（2〜5個）
 // 3. 自動でコメントやDMできるかどうか
 
-// like
+// do like
 if (!instagram.Like()) {
   instagram.Quit();
   log.Write($"Quit");
