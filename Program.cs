@@ -33,7 +33,6 @@ if (!instagram.LaunchBrowser(Instagram.Browser.Chrome, setting.IsNoWindow)) {
 }
 Thread.Sleep(setting.AfterLaunchBrowser);
 
-#if false
 // access website
 if (!instagram.AccessApp()) {
   instagram.Quit();
@@ -92,7 +91,6 @@ if (!instagram.Like()) {
   log.Write($"Quit");
   return;
 }
-#endif
 #endif
 
 var key = ConsoleKey.NoName;
