@@ -73,6 +73,7 @@ if (!instagram.Select(9)) {
 }
 Thread.Sleep(setting.AfterSelect);
 
+#if false
 // do comment like
 if (!instagram.CommentLike()) {
   instagram.Quit();
@@ -82,6 +83,7 @@ if (!instagram.CommentLike()) {
 
 #if false
 // 1. フォローの多いアカウントの投稿にコメントしている人にいいねする
+//    まとめサイト的な投稿の方がコメントしている人が多い
 // 2. コメントしている人に入って投稿にいいねする（2〜5個）
 // 3. 自動でコメントやDMできるかどうか
 
@@ -91,6 +93,7 @@ if (!instagram.Like()) {
   log.Write($"Quit");
   return;
 }
+#endif
 #endif
 
 var key = ConsoleKey.NoName;

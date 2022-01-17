@@ -11,7 +11,7 @@ namespace PLib {
 
     public void Write(string message) {
       var now = DateTime.Now;
-      var contents = $"[{now:yyyyMMdd HH:mm:ss.fff}] {message}";
+      var contents = $"[{now:yyyy/MM/dd HH:mm:ss.fff}] {message}";
       Debug.Print(contents);
       try {
         if (!Directory.Exists(PATH)) {
