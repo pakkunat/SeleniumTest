@@ -24,7 +24,7 @@ namespace PLib {
     public bool LaunchBrowser(Browser browser, bool nowindow) {
       // null check
       if (_chromeDriver != null) {
-        log.Write($"Already launched");
+        log.Write("Already launched");
         return true;
       }
 
@@ -48,7 +48,7 @@ namespace PLib {
     public bool AccessApp() {
       // null check
       if (_chromeDriver == null) {
-        log.Write($"Not launch yet");
+        log.Write("Not launch yet");
         return false;
       }
 
@@ -66,7 +66,7 @@ namespace PLib {
     public bool Login(string username, string password) {
       // null check
       if (_chromeDriver == null) {
-        log.Write($"Not launch yet");
+        log.Write("Not launch yet");
         return false;
       }
 
@@ -102,7 +102,7 @@ namespace PLib {
     public bool Explore(string tag) {
       // null check
       if (_chromeDriver == null) {
-        log.Write($"Not launch yet");
+        log.Write("Not launch yet");
         return false;
       }
 
@@ -119,7 +119,7 @@ namespace PLib {
     public bool Move(int index) {
       // null check
       if (_chromeDriver == null) {
-        log.Write($"Not launch yet");
+        log.Write("Not launch yet");
         return false;
       }
 
@@ -139,7 +139,7 @@ namespace PLib {
     public bool Select(int index) {
       // null check
       if (_chromeDriver == null) {
-        log.Write($"Not launch yet");
+        log.Write("Not launch yet");
         return false;
       }
 
@@ -156,7 +156,7 @@ namespace PLib {
     public bool CommentLike() {
       // null check
       if (_chromeDriver == null) {
-        log.Write($"Not launch yet");
+        log.Write("Not launch yet");
         return false;
       }
 
@@ -173,7 +173,7 @@ namespace PLib {
     public bool Like() {
       // null check
       if (_chromeDriver == null) {
-        log.Write($"Not launch yet");
+        log.Write("Not launch yet");
         return false;
       }
 

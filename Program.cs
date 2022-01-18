@@ -6,8 +6,8 @@ Console.WriteLine("Welcome to automatic likes in instagram");
 
 // load setting file
 var setting = new Setting();
-if (!setting.Read("./setting/setting.toml")) {
-  log.Write($"Quit");
+if (!setting.Read("./setting/setting.txt")) {
+  log.Write("Quit");
   return;
 }
 log.Write($"IsNoWindow: {setting.IsNoWindow}");
@@ -28,7 +28,7 @@ log.Write($"Tags: {tags}");
 // launch browser
 var instagram = new Instagram();
 if (!instagram.LaunchBrowser(Instagram.Browser.Chrome, setting.IsNoWindow)) {
-  log.Write($"Quit");
+  log.Write("Quit");
   return;
 }
 Thread.Sleep(setting.AfterLaunchBrowser);
@@ -36,7 +36,7 @@ Thread.Sleep(setting.AfterLaunchBrowser);
 // access website
 if (!instagram.AccessApp()) {
   instagram.Quit();
-  log.Write($"Quit");
+  log.Write("Quit");
   return;
 }
 Thread.Sleep(setting.AfterAccessApp);
@@ -44,7 +44,7 @@ Thread.Sleep(setting.AfterAccessApp);
 // login
 if (!instagram.Login(setting.UserName, setting.Password)) {
   instagram.Quit();
-  log.Write($"Quit");
+  log.Write("Quit");
   return;
 }
 Thread.Sleep(setting.AfterLogin);
@@ -52,7 +52,7 @@ Thread.Sleep(setting.AfterLogin);
 // explore tags
 if (!instagram.Explore(setting.Tags[0])) {
   instagram.Quit();
-  log.Write($"Quit");
+  log.Write("Quit");
   return;
 }
 Thread.Sleep(setting.AfterExplore);
@@ -60,7 +60,7 @@ Thread.Sleep(setting.AfterExplore);
 // move to latest image
 if (!instagram.Move(9)) {
   instagram.Quit();
-  log.Write($"Quit");
+  log.Write("Quit");
   return;
 }
 Thread.Sleep(setting.AfterMove);
@@ -68,7 +68,7 @@ Thread.Sleep(setting.AfterMove);
 // click image
 if (!instagram.Select(9)) {
   instagram.Quit();
-  log.Write($"Quit");
+  log.Write("Quit");
   return;
 }
 Thread.Sleep(setting.AfterSelect);
@@ -77,20 +77,15 @@ Thread.Sleep(setting.AfterSelect);
 // do comment like
 if (!instagram.CommentLike()) {
   instagram.Quit();
-  log.Write($"Quit");
+  log.Write("Quit");
   return;
 }
 
 #if false
-// 1. フォローの多いアカウントの投稿にコメントしている人にいいねする
-//    まとめサイト的な投稿の方がコメントしている人が多い
-// 2. コメントしている人に入って投稿にいいねする（2〜5個）
-// 3. 自動でコメントやDMできるかどうか
-
 // do like
 if (!instagram.Like()) {
   instagram.Quit();
-  log.Write($"Quit");
+  log.Write("Quit");
   return;
 }
 #endif
@@ -103,4 +98,4 @@ do {
 
 // close instance
 instagram.Quit();
-log.Write($"Quit");
+log.Write("Quit");
