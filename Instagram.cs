@@ -17,6 +17,7 @@ namespace PLib {
     private const string INDEX = "_9AhH0";
     private const string LIKE = "fr66n";
     private const string COMMENT_LIKE = "jdtwu";
+    private const string GUEST = "_6lAjh";
 
     private Log log = Log.Instance;
     private ChromeDriver? _chromeDriver = null;
@@ -182,6 +183,23 @@ namespace PLib {
       } catch (Exception ex) {
         Console.WriteLine(ex.Message);
         log.Write($"Exception: like: {ex.Message}");
+        return false;
+      }
+      return true;
+    }
+
+    public bool MoveToGuest(int index) {
+      // null check
+      if (_chromeDriver == null) {
+        log.Write("Not launch yet");
+        return false;
+      }
+
+      try {
+        _chromeDriver?.FindElements(By.ClassName(GUEST))[index].Click();
+      } catch (Exception ex) {
+        Console.WriteLine(ex.Message);
+        log.Write($"Exception: move to guest: {ex.Message}");
         return false;
       }
       return true;

@@ -20,6 +20,8 @@ namespace PLib {
 
     public int AfterSelect { get; private set; } = 0;
 
+    public int AfterMoveToGuest { get; private set; } = 0;
+
     public List<string> Tags { get; private set; } = new List<string>();
 
     private Log log = Log.Instance;
@@ -39,6 +41,7 @@ namespace PLib {
         AfterExplore = delay.Get<int>("AfterExplore");
         AfterMove = delay.Get<int>("AfterMove");
         AfterSelect = delay.Get<int>("AfterSelect");
+        AfterMoveToGuest = delay.Get<int>("AfterMoveToGuest");
         var explore = toml.Get<TomlTable>("Explore");
         Tags = explore.Get<List<string>>("Tags");
       } catch (Exception ex) {

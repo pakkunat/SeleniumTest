@@ -57,22 +57,39 @@ if (!instagram.Explore(setting.Tags[0])) {
 }
 Thread.Sleep(setting.AfterExplore);
 
+#if false
 // move to latest image
-if (!instagram.Move(9)) {
+/* if (!instagram.Move(9)) {
   instagram.Quit();
   log.Write("Quit");
   return;
 }
-Thread.Sleep(setting.AfterMove);
+Thread.Sleep(setting.AfterMove); */
 
 // click image
-if (!instagram.Select(9)) {
+if (!instagram.Select(0)) {
   instagram.Quit();
   log.Write("Quit");
   return;
 }
 Thread.Sleep(setting.AfterSelect);
 
+// move to guest
+if (!instagram.MoveToGuest(1)) {
+  instagram.Quit();
+  log.Write("Quit");
+  return;
+}
+Thread.Sleep(setting.AfterMoveToGuest);
+
+// click image
+if (!instagram.Select(0)) {
+  instagram.Quit();
+  log.Write("Quit");
+  return;
+}
+Thread.Sleep(setting.AfterSelect);
+#endif
 #if false
 // do comment like
 if (!instagram.CommentLike()) {
