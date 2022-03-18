@@ -1,6 +1,9 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
+using WebDriverManager;
+using WebDriverManager.DriverConfigs.Impl;
+using WebDriverManager.Helpers;
 
 namespace PLib {
   public class Instagram {
@@ -35,9 +38,22 @@ namespace PLib {
         options.AddArgument(NOWINDOW);  
       }
 
+      // get latest chrome driver
+      var driverPath = string.Empty;
+      try {
+        var path = new DriverManager().SetUpDriver(new ChromeConfig(), VersionResolveStrategy.MatchingBrowser);
+        var split = path.Split("/");
+        driverPath = $"./{split[split.Length - 4]}/{split[split.Length - 3]}/{split[split.Length - 2]}";
+        log.Write($"driver path: {driverPath}");
+      } catch (Exception ex) {
+        Console.WriteLine(ex.Message);
+        log.Write($"Exception: get chrome driver: {ex.Message}");
+        return false;
+      }
+
       // launch browser
       try {
-        _chromeDriver = new ChromeDriver(options);
+        _chromeDriver = new ChromeDriver(driverPath, options);
       } catch (Exception ex) {
         Console.WriteLine(ex.Message);
         log.Write($"Exception: launch chrome: {ex.Message}");
