@@ -3,6 +3,8 @@ using Nett;
 namespace PLib {
   public class Setting {
     public bool IsNoWindow { get; private set; } = true;
+
+    public bool IsExit { get; private set; } = false;
     
     public string UserName { get; private set; } = string.Empty;
 
@@ -22,7 +24,7 @@ namespace PLib {
 
     public int AfterMoveToGuest { get; private set; } = 0;
 
-    public List<string> Tags { get; private set; } = new List<string>();
+    public Dictionary<string, bool> Tags { get; private set; } = new Dictionary<string, bool>();
 
     private Log log = Log.Instance;
 
@@ -43,7 +45,10 @@ namespace PLib {
         AfterSelect = delay.Get<int>("AfterSelect");
         AfterMoveToGuest = delay.Get<int>("AfterMoveToGuest");
         var explore = toml.Get<TomlTable>("Explore");
-        Tags = explore.Get<List<string>>("Tags");
+        var tags = explore.Get<List<string>>("Tags");
+        foreach (var s in tags) {
+          Tags.Add(s, false);
+        }
       } catch (Exception ex) {
         log.Write($"Exception: toml read: {ex.Message}");
         return false;
@@ -51,7 +56,29 @@ namespace PLib {
       return true;
     }
 
-    public bool Write() {
+    public bool ReadExit(string filePath) {
+      try {
+        var toml = Toml.ReadFile(filePath);
+        var general = toml.Get<TomlTable>("General");
+        IsExit = general.Get<bool>("Exit");
+      } catch (Exception ex) {
+        log.Write($"Exception: toml read exit: {ex.Message}");
+        return false;
+      }
+      return true;
+    }
+
+    public bool WriteExit(string filePath, bool exit) {
+      try {
+        var toml = Toml.ReadFile(filePath);
+        var general = toml.Get<TomlTable>("General");
+        general.Remove("Exit");
+        general.Add("Exit", exit);
+        Toml.WriteFile(toml, filePath);
+      } catch (Exception ex) {
+        log.Write($"Exception: toml write exit: {ex.Message}");
+        return false;
+      }
       return true;
     }
   }

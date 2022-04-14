@@ -21,6 +21,9 @@ namespace PLib {
     private const string LIKE = "fr66n";
     private const string COMMENT_LIKE = "jdtwu";
     private const string GUEST = "_6lAjh";
+    private const string LIKE_STATUS = "_8-yf5";
+    private const string LIKE_COLOR = "#262626";
+    private const string LIKED_COLOR = "#ed4956";
 
     private Log log = Log.Instance;
     private ChromeDriver? _chromeDriver = null;
@@ -204,6 +207,23 @@ namespace PLib {
       return true;
     }
 
+    public bool GetGuestCount(ref int? count) {
+      // null check
+      if (_chromeDriver == null) {
+        log.Write("Not launch yet");
+        return false;
+      }
+
+      try {
+        count = _chromeDriver?.FindElements(By.ClassName(GUEST)).Count - 1;
+      } catch (Exception ex) {
+        Console.WriteLine(ex.Message);
+        log.Write($"Exception: get guest count: {ex.Message}");
+        return false;
+      }
+      return true;
+    }
+
     public bool MoveToGuest(int index) {
       // null check
       if (_chromeDriver == null) {
@@ -216,6 +236,74 @@ namespace PLib {
       } catch (Exception ex) {
         Console.WriteLine(ex.Message);
         log.Write($"Exception: move to guest: {ex.Message}");
+        return false;
+      }
+      return true;
+    }
+
+    public bool GetLikeStatus(ref bool isLike) {
+      // null check
+      if (_chromeDriver == null) {
+        log.Write("Not launch yet");
+        return false;
+      }
+
+      try {
+        //_chromeDriver?.FindElements(By.(LIKE_STATUS));
+      } catch (Exception ex) {
+        Console.WriteLine(ex.Message);
+        log.Write($"Exception: move to guest: {ex.Message}");
+        return false;
+      }
+      return true;
+    }
+
+    public bool Back() {
+      // null check
+      if (_chromeDriver == null) {
+        log.Write("Not launch yet");
+        return false;
+      }
+
+      try {
+        _chromeDriver?.Navigate().Back();
+      } catch (Exception ex) {
+        Console.WriteLine(ex.Message);
+        log.Write($"Exception: back: {ex.Message}");
+        return false;
+      }
+      return true;
+    }
+
+    public bool Forward() {
+      // null check
+      if (_chromeDriver == null) {
+        log.Write("Not launch yet");
+        return false;
+      }
+
+      try {
+        _chromeDriver?.Navigate().Forward();
+      } catch (Exception ex) {
+        Console.WriteLine(ex.Message);
+        log.Write($"Exception: forward: {ex.Message}");
+        return false;
+      }
+      return true;
+    }
+
+    public bool Refresh() {
+      // null check
+      if (_chromeDriver == null) {
+        log.Write("Not launch yet");
+        return false;
+      }
+
+      try {
+        _chromeDriver?.Navigate().Refresh();
+      } catch (Exception ex) {
+        Console.WriteLine(ex.Message);
+        log.Write($"Exception: refresh: {ex.Message}");
         return false;
       }
       return true;
