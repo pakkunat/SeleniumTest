@@ -8,9 +8,11 @@ using WebDriverManager.Helpers;
 namespace PLib {
   public class Instagram {
     public enum Browser {
+      Brave,
       Chrome
     }
 
+    private const string BRAVE_PATH = @"/Applications/Brave Browser.app/Contents/MacOS/Brave Browser";
     private const string NOWINDOW = "--headless";
     private const string URL = "https://www.instagram.com/";
     private const string USERNAME = "username";
@@ -28,6 +30,17 @@ namespace PLib {
     private Log log = Log.Instance;
     private ChromeDriver? _chromeDriver = null;
 
+    public Browser GetBrowser(string browserName) {
+      var browser = Browser.Chrome;
+      foreach (var t in Enum.GetValues<Browser>()) {
+        if (browserName == t.ToString()) {
+          browser = t;
+          break;
+        }
+      }
+      return browser;
+    }
+
     public bool LaunchBrowser(Browser browser, bool nowindow) {
       // null check
       if (_chromeDriver != null) {
@@ -37,6 +50,9 @@ namespace PLib {
 
       // create browser options
       var options = new ChromeOptions();
+      if (browser == Browser.Brave) {
+        options.BinaryLocation = BRAVE_PATH;
+      }
       if (nowindow) {
         options.AddArgument(NOWINDOW);  
       }

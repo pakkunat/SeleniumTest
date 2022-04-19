@@ -2,6 +2,8 @@ using Nett;
 
 namespace PLib {
   public class Setting {
+    public string Browser { get; private set; } = "Chrome";
+
     public bool IsNoWindow { get; private set; } = true;
 
     public bool IsExit { get; private set; } = false;
@@ -32,6 +34,7 @@ namespace PLib {
       try {
         var toml = Toml.ReadFile(filePath);
         var general = toml.Get<TomlTable>("General");
+        Browser = general.Get<string>("Browser");
         IsNoWindow = general.Get<bool>("NoWindow");
         var account = toml.Get<TomlTable>("Account");
         UserName = account.Get<string>("UserName");

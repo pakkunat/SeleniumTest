@@ -22,6 +22,7 @@ if (!setting.Read(SETTING_FILE)) {
   log.Write("Quit");
   return;
 }
+log.Write($"Browser: {setting.Browser}");
 log.Write($"IsNoWindow: {setting.IsNoWindow}");
 log.Write($"IsExit: {setting.IsExit}");
 log.Write($"UserName: {setting.UserName}");
@@ -40,7 +41,7 @@ log.Write($"Tags: {tags}");
 
 // launch browser
 var instagram = new Instagram();
-if (!instagram.LaunchBrowser(Instagram.Browser.Chrome, setting.IsNoWindow)) {
+if (!instagram.LaunchBrowser(instagram.GetBrowser(setting.Browser), setting.IsNoWindow)) {
   log.Write("Quit");
   return;
 }
