@@ -8,7 +8,6 @@ const int LIKE_MAX = 5;
 
 var log = Log.Instance;
 log.Write("Start --------------------");
-Console.WriteLine("Welcome to insta program");
 
 // write exit flag (false)
 var setting = new Setting();
@@ -40,100 +39,114 @@ foreach (var t in setting.Tags) {
 log.Write($"Tags: {tags}");
 
 // launch browser
+log.Write($"Launching ...");
 var instagram = new Instagram();
 if (!instagram.LaunchBrowser(instagram.GetBrowser(setting.Browser), setting.IsNoWindow)) {
   log.Write("Quit");
   return;
 }
+log.Write($"Launched Browser");
 Thread.Sleep(setting.AfterLaunchBrowser);
 
 // access website
+log.Write($"Accessing Instagram Website ...");
 if (!instagram.AccessApp()) {
   instagram.Quit();
   log.Write("Quit");
   return;
 }
+log.Write($"Accessed Instagram Website");
 Thread.Sleep(setting.AfterAccessApp);
 
 // login
+log.Write($"Login ...");
 if (!instagram.Login(setting.UserName, setting.Password)) {
   instagram.Quit();
   log.Write("Quit");
   return;
 }
+log.Write($"Logined");
 Thread.Sleep(setting.AfterLogin);
 
 // search loop
 foreach (var t in setting.Tags.Keys.ToList<string>()) {
+  var r = 0;
+  log.Write($"Exploring Tag: {t}");
   // explore tag
-  if (!instagram.Explore(t)) {
-    var r = new Random().Next(WAIT_MIN, WAIT_MAX - 1);
-    log.Write($"Random Wait: {r} ms");
-    Thread.Sleep(r * 1000);
-    continue;
-  }
-  Thread.Sleep(setting.AfterExplore);
+  if (instagram.Explore(t)) {
+    log.Write($"Explored");
+    Thread.Sleep(setting.AfterExplore);
 
-  // select loop
-  var selectedIndex = 0;
-  do {
-    // click image
-    if (!instagram.Select(selectedIndex)) {
-      break;
-    }
-    Thread.Sleep(setting.AfterSelect);
-
-    // get guest count
-    var guestCount = (int?)0;
-    if (!instagram.GetGuestCount(ref guestCount)) {
-      break;
-    }
-    log.Write($"Guest Count: {guestCount}");
-
-    for (var i = 0; i < guestCount; i++) {
-      // move to guest
-      if (!instagram.MoveToGuest(i + 1)) {
-        continue;
+    // select loop
+    var selectedIndex = 0;
+    do {
+      // click image
+      if (!instagram.Select(selectedIndex)) {
+        break;
       }
-      Thread.Sleep(setting.AfterMoveToGuest);
+      Thread.Sleep(setting.AfterSelect);
 
-      // decide number of likes (random)
-      var r = new Random().Next(LIKE_MIN, LIKE_MAX - 1);
-      log.Write($"Like Count: {r}");
+      // get guest count
+      var guestCount = (int?)0;
+      if (!instagram.GetGuestCount(ref guestCount)) {
+        break;
+      }
+      log.Write($"Guest Count: {guestCount}");
 
-      // like loop
-      for (var j = 0; j < r; j++) {
-        // do like
-        //if (!instagram.Like()) {
-        //  break;
-        //}
+      for (var i = 0; i < guestCount; i++) {
+        // move to guest
+        if (instagram.MoveToGuest(i + 1)) {
+          Thread.Sleep(setting.AfterMoveToGuest);
 
-        for(;;) {}
+          // decide number of likes (random)
+          r = new Random().Next(LIKE_MIN, LIKE_MAX - 1);
+          log.Write($"Like Count: {r}");
 
-        if (!instagram.Back()) {
-          continue;
+          // like loop
+          for (var j = 0; j < r; j++) {
+            // do like
+            //if (!instagram.Like()) {
+            //  break;
+            //}
+
+            if (!instagram.Back()) {
+              continue;
+            }
+          }
+        }
+
+        // check exit flag
+        if (!setting.ReadExit(SETTING_FILE)) {
+          break;
+        }
+        if (setting.IsExit) {
+          break;
         }
       }
 
-      for(;;){}
-    }
+      // check exit flag
+      if (!setting.ReadExit(SETTING_FILE)) {
+        break;
+      }
+      if (setting.IsExit) {
+        break;
+      }
 
-    // check exit flag
-    if (!setting.ReadExit(SETTING_FILE)) {
-      break;
-    }
-    if (setting.IsExit) {
-      break;
-    }
-
-    selectedIndex++;
-    for(;;){}
-  } while (!setting.IsExit);
+      selectedIndex++;
+    } while (!setting.IsExit);
+  }
 
   // check exit flag
+  if (!setting.ReadExit(SETTING_FILE)) {
+    break;
+  }
   if (setting.IsExit) {
     break;
   }
+
+  r = new Random().Next(WAIT_MIN, WAIT_MAX - 1);
+  log.Write($"Random Wait: {r} ms");
+  Thread.Sleep(r * 1000);
 }
 
 // close instance

@@ -30,6 +30,11 @@ namespace PLib {
     private Log log = Log.Instance;
     private ChromeDriver? _chromeDriver = null;
 
+    /// <summary>
+    /// Get browser type from browser string.
+    /// </summary>
+    /// <param name="browserName"></param>
+    /// <returns>Browser type.</returns>
     public Browser GetBrowser(string browserName) {
       var browser = Browser.Chrome;
       foreach (var t in Enum.GetValues<Browser>()) {
@@ -63,7 +68,7 @@ namespace PLib {
         var path = new DriverManager().SetUpDriver(new ChromeConfig(), VersionResolveStrategy.MatchingBrowser);
         var split = path.Split("/");
         driverPath = $"./{split[split.Length - 4]}/{split[split.Length - 3]}/{split[split.Length - 2]}";
-        log.Write($"driver path: {driverPath}");
+        log.Write($"Driver Path: {driverPath}");
       } catch (Exception ex) {
         Console.WriteLine(ex.Message);
         log.Write($"Exception: get chrome driver: {ex.Message}");
