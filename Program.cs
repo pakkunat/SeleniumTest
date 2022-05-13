@@ -145,7 +145,7 @@ foreach (var t in setting.Tags.Keys.ToList<string>()) {
   }
 
   r = new Random().Next(WAIT_MIN, WAIT_MAX - 1);
-  log.Write($"Random Wait: {r} ms");
+  log.Write($"Random Wait: {r} s");
   Thread.Sleep(r * 1000);
 }
 
