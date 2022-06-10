@@ -19,10 +19,10 @@ namespace PLib {
     private const string PASSWORD = "password";
     private const string LOGIN = "L3NKy";
     private const string EXPLORE = "https://www.instagram.com/explore/tags";
-    private const string INDEX = "_9AhH0";
+    private const string INDEX = "_aagw";
     private const string LIKE = "fr66n";
     private const string COMMENT_LIKE = "jdtwu";
-    private const string GUEST = "_6lAjh";
+    private const string GUEST = "_a9zc";
     private const string LIKE_STATUS = "_8-yf5";
     private const string LIKE_COLOR = "#262626";
     private const string LIKED_COLOR = "#ed4956";

@@ -9,18 +9,13 @@ const int LIKE_MAX = 5;
 var log = Log.Instance;
 log.Write("Start --------------------");
 
-// write exit flag (false)
-var setting = new Setting();
-if (!setting.WriteExit(SETTING_FILE, false)) {
-  log.Write("Quit");
-  return;
-}
-
 // load setting file
+var setting = new Setting();
 if (!setting.Read(SETTING_FILE)) {
-  log.Write("Quit");
+  log.Write("Quit: Error to read setting file");
   return;
 }
+log.Write($"IsAllow: {setting.IsAllow}");
 log.Write($"Browser: {setting.Browser}");
 log.Write($"IsNoWindow: {setting.IsNoWindow}");
 log.Write($"IsExit: {setting.IsExit}");
@@ -37,6 +32,18 @@ foreach (var t in setting.Tags) {
   tags += $"{t},";
 }
 log.Write($"Tags: {tags}");
+
+// check allow boot app flag
+if (!setting.IsAllow) {
+  log.Write("Quit: Not allow boot app");
+  return;
+}
+
+// write exit flag (false)
+if (!setting.WriteExit(SETTING_FILE, false)) {
+  log.Write("Quit: Error to write exit flag");
+  return;
+}
 
 // launch browser
 log.Write($"Launching ...");
@@ -68,14 +75,18 @@ if (!instagram.Login(setting.UserName, setting.Password)) {
 log.Write($"Logined");
 Thread.Sleep(setting.AfterLogin);
 
-// search loop
+// search loop (go all tags that decided by user selected)
 foreach (var t in setting.Tags.Keys.ToList<string>()) {
   var r = 0;
   log.Write($"Exploring Tag: {t}");
   // explore tag
   if (instagram.Explore(t)) {
-    log.Write($"Explored");
+    log.Write("Explored");
     Thread.Sleep(setting.AfterExplore);
+
+    // decide number of likes (random)
+    //r = new Random().Next(LIKE_MIN, LIKE_MAX - 1);
+    //log.Write($"Like Count: {r}");
 
     // select loop
     var selectedIndex = 0;
@@ -84,6 +95,7 @@ foreach (var t in setting.Tags.Keys.ToList<string>()) {
       if (!instagram.Select(selectedIndex)) {
         break;
       }
+      log.Write("Selected");
       Thread.Sleep(setting.AfterSelect);
 
       // get guest count
@@ -104,10 +116,18 @@ foreach (var t in setting.Tags.Keys.ToList<string>()) {
 
           // like loop
           for (var j = 0; j < r; j++) {
+            // click image
+            if (!instagram.Select(j)) {
+              break;
+            }
+            log.Write("Selected");
+            Thread.Sleep(setting.AfterSelect);
+
             // do like
             //if (!instagram.Like()) {
             //  break;
             //}
+            Thread.Sleep(3000);
 
             if (!instagram.Back()) {
               continue;

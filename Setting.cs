@@ -2,6 +2,8 @@ using Nett;
 
 namespace PLib {
   public class Setting {
+    public bool IsAllow { get; private set; } = false;
+
     public string Browser { get; private set; } = "Chrome";
 
     public bool IsNoWindow { get; private set; } = true;
@@ -33,6 +35,8 @@ namespace PLib {
     public bool Read(string filePath) {
       try {
         var toml = Toml.ReadFile(filePath);
+        var preprocess = toml.Get<TomlTable>("Preprocess");
+        IsAllow = preprocess.Get<bool>("Allow");
         var general = toml.Get<TomlTable>("General");
         Browser = general.Get<string>("Browser");
         IsNoWindow = general.Get<bool>("NoWindow");
