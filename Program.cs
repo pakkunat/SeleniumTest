@@ -85,8 +85,8 @@ foreach (var t in setting.Tags.Keys.ToList<string>()) {
     Thread.Sleep(setting.AfterExplore);
 
     // decide number of likes (random)
-    //r = new Random().Next(LIKE_MIN, LIKE_MAX - 1);
-    //log.Write($"Like Count: {r}");
+    var random = new Random().Next(LIKE_MIN, LIKE_MAX - 1);
+    log.Write($"Like Count: {random}");
 
     // select loop
     var selectedIndex = 0;
